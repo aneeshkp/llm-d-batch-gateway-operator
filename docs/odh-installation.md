@@ -174,6 +174,10 @@ spec:
         requestPathURL: /v1/completions
         pollIntervalMs: 1000
         batchSize: 10
+        # Optional: how long a crashed async-processor's claims stay locked
+        # before a replacement reclaims them (Async defaults: 300 / 15000).
+        # claimLeaseTTLSeconds: 300
+        # claimReclaimIntervalMs: 15000
         queuesConfig:
         - name: "llm-d-async:requests:llama-pool"
           workerPoolID: default

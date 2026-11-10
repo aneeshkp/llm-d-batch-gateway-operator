@@ -221,6 +221,16 @@ func (in *AsyncRedisSpec) DeepCopyInto(out *AsyncRedisSpec) {
 		*out = new(int32)
 		**out = **in
 	}
+	if in.ClaimLeaseTTLSeconds != nil {
+		in, out := &in.ClaimLeaseTTLSeconds, &out.ClaimLeaseTTLSeconds
+		*out = new(int32)
+		**out = **in
+	}
+	if in.ClaimReclaimIntervalMs != nil {
+		in, out := &in.ClaimReclaimIntervalMs, &out.ClaimReclaimIntervalMs
+		*out = new(int32)
+		**out = **in
+	}
 	if in.GateParams != nil {
 		in, out := &in.GateParams, &out.GateParams
 		*out = make(map[string]string, len(*in))

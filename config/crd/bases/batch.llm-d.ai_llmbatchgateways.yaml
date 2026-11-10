@@ -683,6 +683,23 @@ spec:
                             format: int32
                             minimum: 1
                             type: integer
+                          claimLeaseTTLSeconds:
+                            description: |-
+                              ClaimLeaseTTLSeconds controls how long a dequeued Redis message stays claimed by a
+                              processor before another replica may reclaim it. This is the crash-detection window
+                              after a processor dies without acknowledging its in-flight messages.
+                              When omitted, the async-processor default (300) applies.
+                            format: int32
+                            minimum: 1
+                            type: integer
+                          claimReclaimIntervalMs:
+                            description: |-
+                              ClaimReclaimIntervalMs is the interval in milliseconds at which the async-processor
+                              scans for expired Redis claims and requeues them.
+                              When omitted, the async-processor default (15000) applies.
+                            format: int32
+                            minimum: 1
+                            type: integer
                           gateParams:
                             additionalProperties:
                               type: string

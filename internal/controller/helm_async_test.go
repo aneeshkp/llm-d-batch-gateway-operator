@@ -80,6 +80,11 @@ func TestSpecToAsyncHelmValues(t *testing.T) {
 		if got := urlSecret["key"]; got != "redis-url" {
 			t.Errorf("transportConfig.urlSecret.key = %v, want redis-url", got)
 		}
+		for _, key := range []string{"claim_lease_ttl_seconds", "claim_reclaim_interval_ms"} {
+			if got, ok := transportConfig[key]; ok {
+				t.Errorf("transportConfig.%s = %v, want absent when unset", key, got)
+			}
+		}
 		queues, ok := transportConfig["queues"].([]any)
 		if !ok || len(queues) != 1 {
 			t.Fatalf("transportConfig.queues = %v, want one queue", transportConfig["queues"])
@@ -125,6 +130,10 @@ func TestSpecToAsyncHelmValues_TransportQueues(t *testing.T) {
 	batchSize := int32(10)
 	gw.Spec.Processor.AsyncConfig.Redis.PollIntervalMs = &pollIntervalMs
 	gw.Spec.Processor.AsyncConfig.Redis.BatchSize = &batchSize
+	claimLeaseTTLSeconds := int32(3)
+	claimReclaimIntervalMs := int32(500)
+	gw.Spec.Processor.AsyncConfig.Redis.ClaimLeaseTTLSeconds = &claimLeaseTTLSeconds
+	gw.Spec.Processor.AsyncConfig.Redis.ClaimReclaimIntervalMs = &claimReclaimIntervalMs
 	gw.Spec.Processor.AsyncConfig.Redis.QueuesConfig = []batchv1alpha1.AsyncQueueConfig{
 		{
 			Name:           asyncRequestQueueName("pool-a"),
@@ -155,6 +164,12 @@ func TestSpecToAsyncHelmValues_TransportQueues(t *testing.T) {
 	}
 	if got := transportConfig["batch_size"]; got != int64(10) {
 		t.Errorf("transportConfig.batch_size = %v, want 10", got)
+	}
+	if got := transportConfig["claim_lease_ttl_seconds"]; got != int64(3) {
+		t.Errorf("transportConfig.claim_lease_ttl_seconds = %v, want 3", got)
+	}
+	if got := transportConfig["claim_reclaim_interval_ms"]; got != int64(500) {
+		t.Errorf("transportConfig.claim_reclaim_interval_ms = %v, want 500", got)
 	}
 	if got := transportConfig["enable_tracing"]; got != true {
 		t.Errorf("transportConfig.enable_tracing = %v, want true", got)

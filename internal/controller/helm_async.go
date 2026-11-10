@@ -93,6 +93,12 @@ func specToAsyncHelmValues(gw *batchv1alpha1.LLMBatchGateway, secretName string,
 		if ac.Redis.BatchSize != nil {
 			transportConfig["batch_size"] = int64(*ac.Redis.BatchSize)
 		}
+		if ac.Redis.ClaimLeaseTTLSeconds != nil {
+			transportConfig["claim_lease_ttl_seconds"] = int64(*ac.Redis.ClaimLeaseTTLSeconds)
+		}
+		if ac.Redis.ClaimReclaimIntervalMs != nil {
+			transportConfig["claim_reclaim_interval_ms"] = int64(*ac.Redis.ClaimReclaimIntervalMs)
+		}
 		if gw.Spec.OTEL != nil && gw.Spec.OTEL.RedisTracing {
 			transportConfig["enable_tracing"] = true
 		}

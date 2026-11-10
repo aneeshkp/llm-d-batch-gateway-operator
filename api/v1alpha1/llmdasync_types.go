@@ -96,6 +96,21 @@ type AsyncRedisSpec struct {
 	// +kubebuilder:validation:Minimum=1
 	BatchSize *int32 `json:"batchSize,omitempty"`
 
+	// ClaimLeaseTTLSeconds controls how long a dequeued Redis message stays claimed by a
+	// processor before another replica may reclaim it. This is the crash-detection window
+	// after a processor dies without acknowledging its in-flight messages.
+	// When omitted, the async-processor default (300) applies.
+	// +optional
+	// +kubebuilder:validation:Minimum=1
+	ClaimLeaseTTLSeconds *int32 `json:"claimLeaseTTLSeconds,omitempty"`
+
+	// ClaimReclaimIntervalMs is the interval in milliseconds at which the async-processor
+	// scans for expired Redis claims and requeues them.
+	// When omitted, the async-processor default (15000) applies.
+	// +optional
+	// +kubebuilder:validation:Minimum=1
+	ClaimReclaimIntervalMs *int32 `json:"claimReclaimIntervalMs,omitempty"`
+
 	// GateType specifies the dispatch gating mechanism (e.g. "prometheus-saturation", "redis-quota").
 	// +kubebuilder:validation:MaxLength=253
 	GateType string `json:"gateType,omitempty"`
